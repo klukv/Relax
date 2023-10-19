@@ -69,7 +69,7 @@
 .search__cards{
     display: grid;
     grid-template-columns: 380px 380px;
-    grid-template-rows: 250px 250px;
+    grid-template-rows: 250px;
    row-gap: 50px;
    column-gap: 100px;
 }

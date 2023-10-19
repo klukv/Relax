@@ -11,19 +11,22 @@ import { contextSearch } from "./models/card";
 
 const defaultValue = {
   title: '',
+  type: '',
   setTitle: () => "",
+  setType: () => ""
 }
 
 export const infoCard = createContext<contextSearch>(defaultValue);
 
 const App: React.FC = () => {
   const [title, setTitle] = useState('');
+  const [type, setType] = useState('');
 
   return (
     <main className="wrapper">
       <div className="main__inner">
         <h1 className="main__title">ВГТУ</h1>
-        <infoCard.Provider value={{title, setTitle}}>
+        <infoCard.Provider value={{title,type, setTitle, setType}}>
         <Routes>
           <Route path={URL_MAIN} element={<PageSearch />} />
           <Route path={URL_INFO} element={<PageInfo />} />

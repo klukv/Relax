@@ -1,16 +1,37 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import "../css/info.css";
 import { useNavigate } from "react-router-dom";
 import { infoCard } from "../App";
+import { getInfoCard, getInfoSearch } from "../services/contentService";
+import { ICard, Icontent } from "../models/card";
 
 const PageInfo: React.FC = () => {
   const navigate = useNavigate();
-  const cardInfo = useContext(infoCard);
+  const [content, setContent] = useState<Icontent>({
+    content: '',
+    address: '',
+    score : 0
+  });
+  const [cards, setCard] = useState<ICard[]>([]);
+  const info = useContext(infoCard);
 
   const handleClickBack = () => {
     navigate('/');
   }
+
+  useEffect(() => {
+    if(info.type === 'search'){
+      getInfoSearch(info.title).then(data => {
+        setContent(data);
+        console.log(data);
+      })
+    }else if(info.type === 'card'){
+      getInfoCard(info.title).then(data => {
+        setCard(data);
+      })
+    }
+  },[])
 
   return (
     <div className="info">
@@ -42,18 +63,13 @@ const PageInfo: React.FC = () => {
             </g>
           </svg>
         </div>
-        <h2 className="info__title">{cardInfo.title}</h2>
+        <h2 className="info__title">{info.title}</h2>
         <div className="info__block">
           <div className="info__block-text">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum
-            </p>
+              {info.type === 'search' ? (<><h3 className="info__content">Адресс</h3>
+              <p>{content.address}</p></>) : <ul>
+                {cards.map((infoCard, index) => (<li key={index}>Заголовок:{infoCard.title} контент:{infoCard.content}</li>))}
+                </ul>}
           </div>
         </div>
       </div>

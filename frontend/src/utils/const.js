@@ -3,6 +3,8 @@ export const URL_INFO = "/info";
 
 // backend request const
 export const URL_API = "http://localhost:8090";
+export const URL_API_SEARCH = "/searchURL";
+export const URL_GET_INFO = "/getInfo";
 
 export const INFO_CARDS = [
   {
@@ -14,13 +16,5 @@ export const INFO_CARDS = [
     title: "Расписание",
     desription:
       'Вкладка "Расписание" предоставляет информацию о расписании занятий на различных факультетах Воронежского государственного технического университета. Здесь вы можете найти актуальное расписание занятий для каждого факультета, включающее лекции, практические занятия и семинары',
-  },
-  {
-    title: "Военная кафедра",
-    desription: "Краткое описание",
-  },
-  {
-    title: "Военная кафедра",
-    desription: "Краткое описание",
-  },
+  }
 ];

@@ -9,21 +9,25 @@ import { useNavigate } from "react-router-dom";
 const PageSearch: React.FC = () => {
   const refMenu = useRef<HTMLDivElement>(null);
   const [menuDateActive, setMenuDateActive] = useState(false);
-  const [role, setRole] = useState('Студент');
+  const [searchStr, setSearchStr] = useState("");
+  const [role, setRole] = useState("Студент");
   const navigate = useNavigate();
   const cardContext = useContext(infoCard);
 
   useClickOutside(refMenu, setMenuDateActive, menuDateActive);
 
-  const handleClickCard = (title:string) => {
-    cardContext.setTitle(title);
-    navigate('/info');
-  }
+  const navigateInfoCard = (title: string, type: string) => {
+    if (title.length !== 0) {
+      cardContext.setTitle(title);
+      cardContext.setType(type);
+      navigate("/info");
+    }
+  };
 
-  const handleClickList = (role:string) => {
+  const handleClickList = (role: string) => {
     setRole(role);
     setMenuDateActive(false);
-  }
+  };
 
   return (
     <div className="search">
@@ -84,9 +88,24 @@ const PageSearch: React.FC = () => {
             </svg>
             {menuDateActive && (
               <ul className="search__role-popup">
-                <li className="search__role-popup__point" onClick={() => handleClickList('Студент')}>Студент</li>
-                <li className="search__role-popup__point" onClick={() => handleClickList('Преподаватель')}>Преподаватель</li>
-                <li className="search__role-popup__point" onClick={() => handleClickList('Абитуриент')}>Абитуриент</li>
+                <li
+                  className="search__role-popup__point"
+                  onClick={() => handleClickList("Студент")}
+                >
+                  Студент
+                </li>
+                <li
+                  className="search__role-popup__point"
+                  onClick={() => handleClickList("Преподаватель")}
+                >
+                  Преподаватель
+                </li>
+                <li
+                  className="search__role-popup__point"
+                  onClick={() => handleClickList("Абитуриент")}
+                >
+                  Абитуриент
+                </li>
               </ul>
             )}
           </div>
@@ -94,11 +113,15 @@ const PageSearch: React.FC = () => {
             <div className="search__input-quest__block">
               <input
                 type="text"
+                onChange={(event) => setSearchStr(event.target.value)}
                 className="search__input-quest__value"
                 placeholder="Поиск"
               />
             </div>
-            <div className="search__input-quest__svg">  
+            <div
+              className="search__input-quest__svg"
+              onClick={() => navigateInfoCard(searchStr, 'search')}
+            >
               <svg
                 width="26px"
                 height="26px"
@@ -126,16 +149,24 @@ const PageSearch: React.FC = () => {
             </div>
           </div>
         </div>
-       {role === 'Студент' ?  <div className="search__cards">
-          {INFO_CARDS.map((card, index) => (
-            <div key={index} className="search__cards-card" onClick={() => handleClickCard(card.title)}>
-              <h2 className="search__card-title">{card.title}</h2>
-              <div className="search__card-description">
-                <p>{card.desription}</p>
+        {role === "Студент" ? (
+          <div className="search__cards">
+            {INFO_CARDS.map((card, index) => (
+              <div
+                key={index}
+                className="search__cards-card"
+                onClick={() => navigateInfoCard(card.title, 'card')}
+              >
+                <h2 className="search__card-title">{card.title}</h2>
+                <div className="search__card-description">
+                  <p>{card.desription}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>: <div className="nothing_date">Разработка в планах:)</div>}
+            ))}
+          </div>
+        ) : (
+          <div className="nothing_date">Разработка в планах:)</div>
+        )}
       </div>
     </div>
   );
