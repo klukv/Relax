@@ -8,30 +8,30 @@ import { ICard, Icontent } from "../models/card";
 
 const PageInfo: React.FC = () => {
   const navigate = useNavigate();
-  const [content, setContent] = useState<Icontent>({
-    content: '',
-    address: '',
-    score : 0
-  });
+  const [content, setContent] = useState<Icontent[]>([]);
   const [cards, setCard] = useState<ICard[]>([]);
   const info = useContext(infoCard);
 
   const handleClickBack = () => {
-    navigate('/');
-  }
+    navigate("/");
+  };
 
   useEffect(() => {
-    if(info.type === 'search'){
-      getInfoSearch(info.title).then(data => {
+    if (info.type === "search") {
+      getInfoSearch(info.title).then((data) => {
         setContent(data);
         console.log(data);
-      })
-    }else if(info.type === 'card'){
-      getInfoCard(info.title).then(data => {
+      });
+    } else if (info.type === "card") {
+      let name;
+      info.title === "Военная кафедра"
+        ? (name = "military")
+        : (name = "schedule");
+      getInfoCard(name).then((data) => {
         setCard(data);
-      })
+      });
     }
-  },[])
+  }, [info.type]);
 
   return (
     <div className="info">
@@ -66,10 +66,22 @@ const PageInfo: React.FC = () => {
         <h2 className="info__title">{info.title}</h2>
         <div className="info__block">
           <div className="info__block-text">
-              {info.type === 'search' ? (<><h3 className="info__content">Адресс</h3>
-              <p>{content.address}</p></>) : <ul>
-                {cards.map((infoCard, index) => (<li key={index}>Заголовок:{infoCard.title} контент:{infoCard.content}</li>))}
-                </ul>}
+            {info.type === "search" ? (
+              content.map((infoSearch, index) => (
+                <div key={index}>
+                  <h3 className="info__content">Адресс</h3>
+                  <p>{infoSearch.address}</p>
+                </div>
+              ))
+            ) : (
+              <ul>
+                {cards.map((infoCard, index) => (
+                  <li key={index}>
+                    Заголовок:{infoCard.title} контент:{infoCard.content}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>
